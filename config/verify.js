@@ -8,7 +8,7 @@ const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TO
 router.post('/check-verification', async (req, res) => {
   const { phoneNumber, code } = req.body;
   try {
-    const verificationCheck = await client.verify.v2.services("process.env.TWILIO_VERIFY_SERVICE_SID")
+    const verificationCheck = await client.verify.v2.services(process.env.TWILIO_VERIFY_SERVICE_SID)
       .verificationChecks
       .create({ to: phoneNumber, code });
     if (verificationCheck.status === 'approved') {
