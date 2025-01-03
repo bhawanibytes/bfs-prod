@@ -1,19 +1,20 @@
+const app = require("./app");
+const connectDB = require("./config/db");
+const { port } = require("./config/env");
 
-const express = require('express');
+const express = require("express");
+const cookieParser = require("cookie-parser");
+const authRoutes = require("./routes/authRoutes");
+const errorHandler = require("./middlewares/errorHandler");
+
 const app = express();
-const bodyParser = require('body-parser');
-const sendVerification = require('./config/requestsms');
-const checkVerification = require('./config/verify');
-require('dotenv').config();
+connectDB();
 
-app.use(bodyParser.json());
-app.use('/api', sendVerification);
-app.use('/api', checkVerification);
+app.use(express.json());
+app.use(cookieParser());
+app.use("/api/auth", authRoutes);
+app.use(errorHandler);
 
-const port = process.env.PORT || 3000;
-app.get('/', (req, res) => {
-    res.send('Welcome to the Phone Verification API!');
-} );
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
